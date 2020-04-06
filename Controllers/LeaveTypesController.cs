@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using aspnet_tut1.Contracts;
+using aspnet_tut1.Data;
+using aspnet_tut1.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +26,9 @@ namespace aspnet_tut1.Controllers
         // GET: LeaveTypes
         public ActionResult Index()
         {
-            return View();
+            var leavetypes = _repo.FindAll().ToList();
+            var model = _mapper.Map<List<LeaveType>, List<DetailedLeaveTypeViewModel>>(leavetypes);
+            return View(model);
         }
 
         // GET: LeaveTypes/Details/5
