@@ -40,6 +40,12 @@ namespace aspnet_tut1.Repository
             return leaveAllocation;
         }
 
+        public bool isExists(int id)
+        {
+            return _db.LeaveAllocations.Any(q => q.Id == id);
+
+        }
+
         public bool Save()
         {
             var changes = _db.SaveChanges();

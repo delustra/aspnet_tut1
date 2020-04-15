@@ -1,22 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using aspnet_tut1.Contracts;
+using aspnet_tut1.Data;
+using aspnet_tut1.Mappings;
+using aspnet_tut1.Repository;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using AutoMapper;
-using aspnet_tut1.Mappings;
-using aspnet_tut1.Data;
-using aspnet_tut1.Repository;
-using aspnet_tut1.Contracts;
-
+using System.Threading.Tasks;
 
 namespace aspnet_tut1
 {
@@ -33,9 +27,8 @@ namespace aspnet_tut1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            
+                options.UseNpgsql(Configuration.GetConnectionString("GoogleCloudPostgres")));
+
             //Add references to Repository and Contract 
             services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
             services.AddScoped<ILeaveHistoryRepository, LeaveHistoryRepository>();
@@ -43,14 +36,22 @@ namespace aspnet_tut1
 
             services.AddAutoMapper(typeof(AutoMaps));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(  IApplicationBuilder app, 
+                                IWebHostEnvironment env,
+                                UserManager<IdentityUser> userManager,
+                                RoleManager<IdentityRole> roleManager
+            
+            )
+
         {
             if (env.IsDevelopment())
             {
@@ -70,6 +71,8 @@ namespace aspnet_tut1
 
             app.UseAuthentication();
             app.UseAuthorization();
+            SeedData.Seed(userManager, roleManager);
+
 
             app.UseEndpoints(endpoints =>
             {
@@ -78,6 +81,8 @@ namespace aspnet_tut1
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            
         }
     }
 }

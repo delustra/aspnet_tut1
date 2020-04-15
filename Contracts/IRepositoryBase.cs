@@ -8,6 +8,8 @@ namespace aspnet_tut1.Contracts
 
         T FindBy(int id);
 
+        bool isExists(int id);
+
         bool Create(T entity);
 
         bool Update(T entity);

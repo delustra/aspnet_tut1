@@ -14,6 +14,8 @@ namespace aspnet_tut1.Data
         {
         }
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql("Host=104.199.41.96;Database=original;Username=test;Password=test");
+
         public DbSet<Employee> Employees { get; set; }
         public DbSet<LeaveAllocation> LeaveAllocations { get; set; }
         public DbSet<LeaveHistory>  LeaveHistories { get; set; }

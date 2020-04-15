@@ -39,6 +39,13 @@ namespace aspnet_tut1.Repository
             var foundLeaveHistory = _db.LeaveHistories.Find(id);
             return foundLeaveHistory;
         }
+
+        public bool isExists(int id)
+        {
+            return _db.LeaveHistories.Any(q => q.Id == id);
+
+        }
+
         public bool Save()
         {
             var changes = _db.SaveChanges();

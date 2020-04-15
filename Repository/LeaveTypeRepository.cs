@@ -3,7 +3,6 @@ using aspnet_tut1.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace aspnet_tut1.Repository
 {
@@ -43,10 +42,16 @@ namespace aspnet_tut1.Repository
 
         public ICollection<LeaveType> GetEmployeesByLeaveType(int id)
         {
+            
             throw new NotImplementedException();
         }
 
-        
+        public bool isExists(int id)
+        {
+            return _db.LeaveTypes.Any(q => q.Id == id);
+            
+        }
+
         public bool Save()
         {
             var changes = _db.SaveChanges();

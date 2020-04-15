@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using aspnet_tut1.Contracts;
+﻿using aspnet_tut1.Contracts;
 using aspnet_tut1.Data;
 using aspnet_tut1.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace aspnet_tut1.Controllers
 {
+    [Authorize(Roles ="administrator")]
     public class LeaveTypesController : Controller
     {
 
@@ -23,6 +24,7 @@ namespace aspnet_tut1.Controllers
             _mapper = mapper;
         }
 
+       
         // GET: LeaveTypes
         public ActionResult Index()
         {
@@ -34,23 +36,45 @@ namespace aspnet_tut1.Controllers
         // GET: LeaveTypes/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            
+                if (!_repo.isExists(id))
+                {
+                    return NotFound();
+                }
+
+                var leaveType = _repo.FindBy(id);
+                var mappedLeaveType = _mapper.Map<DetailedLeaveTypeViewModel>(leaveType);
+
+                return View(mappedLeaveType);
+            
         }
 
         // GET: LeaveTypes/Create
         public ActionResult Create()
         {
+
             return View();
         }
 
         // POST: LeaveTypes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(DetailedLeaveTypeViewModel model)
         {
             try
             {
-                // TODO: Add insert logic here
+                if (!ModelState.IsValid) { return View(); }
+                var mappedleaveType = _mapper.Map<LeaveType>(model);
+                mappedleaveType.DateCreated = DateTime.Now;
+
+                var isCreated = _repo.Create(mappedleaveType);
+
+
+                if (!isCreated)
+                {
+                    ModelState.AddModelError("", "Creation went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
@@ -63,40 +87,92 @@ namespace aspnet_tut1.Controllers
         // GET: LeaveTypes/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            if (!_repo.isExists(id))
+            {
+                return NotFound();
+            }
+
+            var leaveType = _repo.FindBy(id);
+            var mappedLeaveType = _mapper.Map<DetailedLeaveTypeViewModel>(leaveType);
+
+            return View(mappedLeaveType);
         }
 
         // POST: LeaveTypes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(DetailedLeaveTypeViewModel model)
         {
             try
             {
-                // TODO: Add update logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(); 
+                }
+
+                var mappedLeaveType = _mapper.Map<LeaveType>(model);
+                var isSuccess = _repo.Update(mappedLeaveType);
+                
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Update went wrong");
+                    return View(model);
+                }
+                
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                ModelState.AddModelError("", "Update went wrong");
+                return View(model);
             }
         }
 
         // GET: LeaveTypes/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            if (!_repo.isExists(id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var model = _repo.FindBy(id);
+            var mappedLeaveType = _mapper.Map<LeaveType>(model);
+            var isSuccess = _repo.Delete(mappedLeaveType);
+
+            if (!isSuccess)
+            {
+                return BadRequest();
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: LeaveTypes/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(DetailedLeaveTypeViewModel model)
         {
             try
             {
-                // TODO: Add delete logic here
+                if (!ModelState.IsValid)
+                {
+                    return View();
+                }
+
+                var mappedLeaveType = _mapper.Map<LeaveType>(model);
+                var isSuccess = _repo.Delete(mappedLeaveType);
+
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Delete went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
