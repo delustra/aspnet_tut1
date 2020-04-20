@@ -17,12 +17,8 @@ namespace aspnet_tut1.Data
         public LeaveType LeaveType { get; set; }
         public int LeaveTypeId { get; set; }
 
-        public int Property
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        public int Period { get; set; }
+        public int DefaultDays { get; set; }
+       
     }
 }

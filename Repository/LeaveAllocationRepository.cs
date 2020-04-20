@@ -1,9 +1,9 @@
 ﻿using aspnet_tut1.Contracts;
 using aspnet_tut1.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace aspnet_tut1.Repository
 {
@@ -14,6 +14,14 @@ namespace aspnet_tut1.Repository
         public LeaveAllocationRepository(ApplicationDbContext db)
         {
             _db = db;
+        }
+
+        public bool CheckAllocation(int leavetypeid, string employeeeid)
+        {
+            var period = DateTime.Now.Year;
+            return FindAll()
+                .Where(q => q.EmployeeId == employeeeid && q.LeaveTypeId == leavetypeid && q.Period == period)
+                .Any();
         }
 
         public bool Create(LeaveAllocation entity)
@@ -28,10 +36,22 @@ namespace aspnet_tut1.Repository
             return Save();
         }
 
+
         public ICollection<LeaveAllocation> FindAll()
         {
-            var allLeaveAllocations = _db.LeaveAllocations.ToList();
+            var allLeaveAllocations = _db.LeaveAllocations.Include(q => q.LeaveType).ToList();
             return allLeaveAllocations;
+        }
+
+    
+        public List<LeaveAllocation> FindAllByUser(string employeeid)
+        {
+            var period = DateTime.Now.Year;
+            
+            var LeaveAllocationsList = FindAll()
+                 .Where(q => q.EmployeeId == employeeid && q.Period == period)
+                 .ToList();
+            return LeaveAllocationsList;
         }
 
         public LeaveAllocation FindBy(int id)

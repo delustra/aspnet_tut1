@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using aspnet_tut1.Data;
@@ -9,9 +10,10 @@ using aspnet_tut1.Data;
 namespace aspnet_tut1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200415110306_Ltypes_changes")]
+    partial class Ltypes_changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,9 +235,6 @@ namespace aspnet_tut1.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("DefaultDays")
-                        .HasColumnType("integer");
-
                     b.Property<string>("EmployeeId")
                         .HasColumnType("text");
 
@@ -321,7 +320,7 @@ namespace aspnet_tut1.Migrations
                     b.ToTable("LeaveTypes");
                 });
 
-            modelBuilder.Entity("aspnet_tut1.Models.DetailedLeaveTypeViewModel", b =>
+            modelBuilder.Entity("aspnet_tut1.Models.LeaveTypeViewModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -331,18 +330,12 @@ namespace aspnet_tut1.Migrations
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("DefaultDays")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("NumberOfDays")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.ToTable("DetailedLeaveTypeViewModel");
+                    b.ToTable("LeaveTypeViewModel");
                 });
 
             modelBuilder.Entity("aspnet_tut1.Data.Employee", b =>

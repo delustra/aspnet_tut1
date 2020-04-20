@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using aspnet_tut1.Data;
+using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
 namespace aspnet_tut1
 {
     public static class SeedData
     {
-        public static void Seed(UserManager<IdentityUser> userManager,
+        public static void Seed(UserManager<Employee> userManager,
                                 RoleManager<IdentityRole> roleManager)
         {
          
@@ -13,12 +14,12 @@ namespace aspnet_tut1
         SeedUsers(userManager, "admin@admin.com", "administrator");
 
         }
-        private static void SeedUsers(UserManager<IdentityUser> userManager, string userName, string userRole)
+        private static void SeedUsers(UserManager<Employee> userManager, string userName, string userRole)
         {
 
             if (userManager.FindByNameAsync(userName).Result == null)
             {
-                var user = new IdentityUser
+                var user = new Employee
                 {
                     UserName = userName,
                     Email = "test@test.com"

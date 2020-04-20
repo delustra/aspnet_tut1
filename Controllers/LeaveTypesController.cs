@@ -3,7 +3,6 @@ using aspnet_tut1.Data;
 using aspnet_tut1.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ using System.Linq;
 
 namespace aspnet_tut1.Controllers
 {
-    [Authorize(Roles ="administrator")]
+    [Authorize(Roles = "administrator")]
     public class LeaveTypesController : Controller
     {
 
@@ -24,29 +23,33 @@ namespace aspnet_tut1.Controllers
             _mapper = mapper;
         }
 
-       
+
         // GET: LeaveTypes
         public ActionResult Index()
         {
             var leavetypes = _repo.FindAll().ToList();
             var model = _mapper.Map<List<LeaveType>, List<DetailedLeaveTypeViewModel>>(leavetypes);
+
             return View(model);
         }
+
+
+
 
         // GET: LeaveTypes/Details/5
         public ActionResult Details(int id)
         {
-            
-                if (!_repo.isExists(id))
-                {
-                    return NotFound();
-                }
 
-                var leaveType = _repo.FindBy(id);
-                var mappedLeaveType = _mapper.Map<DetailedLeaveTypeViewModel>(leaveType);
+            if (!_repo.isExists(id))
+            {
+                return NotFound();
+            }
 
-                return View(mappedLeaveType);
-            
+            var leaveType = _repo.FindBy(id);
+            var mappedLeaveType = _mapper.Map<DetailedLeaveTypeViewModel>(leaveType);
+
+            return View(mappedLeaveType);
+
         }
 
         // GET: LeaveTypes/Create
@@ -107,18 +110,18 @@ namespace aspnet_tut1.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return View(); 
+                    return View();
                 }
 
                 var mappedLeaveType = _mapper.Map<LeaveType>(model);
                 var isSuccess = _repo.Update(mappedLeaveType);
-                
+
                 if (!isSuccess)
                 {
                     ModelState.AddModelError("", "Update went wrong");
                     return View(model);
                 }
-                
+
 
                 return RedirectToAction(nameof(Index));
             }

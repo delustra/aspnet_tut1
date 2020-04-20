@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200416110205_LeaveAllocationChanges.cs" />
+    <Compile Remove="Migrations\20200416110205_LeaveAllocationChanges.Designer.cs" />
+    <Compile Remove="Migrations\20200416130853_LeaveAllocationChanges.cs" />
+    <Compile Remove="Migrations\20200416130853_LeaveAllocationChanges.Designer.cs" />
+    <Compile Remove="Migrations\20200416131024_LeaveAllocationChanges.cs" />
+    <Compile Remove="Migrations\20200416131024_LeaveAllocationChanges.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.3" />
@@ -19,6 +28,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="Views\Employee\" />
   </ItemGroup>
 
 </Project>

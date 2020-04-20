@@ -15,11 +15,25 @@ namespace aspnet_tut1.Models
         public DateTime DateCreated { get; set; }
         public EmployeeViewModel Employee { get; set; }
         public string EmployeeId { get; set; }
-
+        public int Period { get; set; }
         public DetailedLeaveTypeViewModel LeaveType { get; set; }
         public int LeaveTypeId { get; set; }
 
-        public IEnumerable<SelectListItem> Employees { get; set; }
-        public IEnumerable<SelectListItem> LeaveTypes { get; set; }
+
+    }
+
+    public class CreateLeaveAllocationViewModel
+    {
+        public int NumberUpdated { get; set; }
+        public List<DetailedLeaveTypeViewModel> LeaveTypes { get; set; }
+
+    }
+
+    public class ViewAllocationsViewModel 
+    {
+        public EmployeeViewModel Employee { get; set; }
+        public string EmployeeID { get; set; }
+        public List<LeaveAllocationViewModel> LeaveAllocationsList { get; set; }
+
     }
 }
